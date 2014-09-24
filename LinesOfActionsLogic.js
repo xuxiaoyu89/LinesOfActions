@@ -7,7 +7,7 @@ var isMoveOk = (function(){
     }
     function isWinner(r, c, board){
     	var visited = new Array(8);
-    	for(i=0; i<8; i++){
+    	for(var i=0; i<8; i++){
     		visited[i] = new Array(false, false, false, false, false, false, false, false);
     	}
     	var id = board[r][c];
@@ -110,7 +110,7 @@ var isMoveOk = (function(){
     function getWinner(board){
     	var wrow = -1, wcol = -1;
     	var rrow = -1, rcol = -1;
-        for(i=0; i<8; i++){
+        for(var i=0; i<8; i++){
         	for(j=0; j<8; j++){
         		if(wrow>=0 && wcol>=0 && rrow>=0 && rcol>=0){
         			break;
@@ -146,8 +146,7 @@ var isMoveOk = (function(){
         }
         return [firstOperation,
                 {set: {key: 'board', value: boardAfterMove}},
-                {set: {key: 'before', value: {row: brow, col: bcol}}},
-                {set: {key: 'after', value:{row: arow, col: acol}}}
+                {set: {key: 'delta', value: {brow: brow, bcol: bcol, arow: arow, acol: acol}}}
                ];
     }
 
@@ -155,12 +154,12 @@ var isMoveOk = (function(){
     function getCheckNum(board, startR, startC, slope){
         var checkNum = 0;
         if(slope === 0){
-            for(i=0; i<8; i++){
+            for(var i=0; i<8; i++){
                 if(board[startR][startC+i] !== '') {checkNum++;}
             }
         }
         else if(slope === 2){
-            for(i=0; i<8; i++){
+            for(var i=0; i<8; i++){
                 if(board[startR+i][startC] !== '') {checkNum++;}
             }
         }
@@ -172,7 +171,7 @@ var isMoveOk = (function(){
             }
         }
         else{
-        	while(startR !== 0 && startC !== 8){
+        	while(startR !== -1 && startC !== 8){
         		if(board[startR][startC] !== '') {checkNum++;}
             	startR--;
             	startC++;
@@ -208,26 +207,27 @@ var isMoveOk = (function(){
             distance = Math.abs(brow-arow);
             slope = (brow-arow)/(bcol-acol);
             if(slope>0){
-                if(arow >= acol){
-                    startR = arow-acol;
+                if(brow >= bcol){
+                    startR = brow-bcol;
                     startC = 0;
                 }
                 else{
                     startR = 0;
-                    startC = acol-arow;
+                    startC = bcol-brow;
                 }
             }
             else {
-                if((arow+acol)>=7){
+                if((brow+bcol)>=7){
                     startR = 7;
-                    startC = arow+acol-7;
+                    startC = brow+bcol-7;
                 }
                 else{
-                    startR = 7-arow-acol;
+                    startR = brow+bcol;
                     startC = 0;
                 }
             }
         }
+        //console.log("startR: " + startR + "startC: " + startC);
         var num = getCheckNum(board, startR, startC, slope);
         //console.log("checkNum: " + num);
         if(distance !== num){
@@ -247,6 +247,86 @@ var isMoveOk = (function(){
         }   
         return true;
     }
+    
+    function getExampleMoves(initialTurnIndex, initialState, arrayOfRowColComment) {
+        var exampleMoves = [];
+        var state = initialState;
+        var turnIndex = initialTurnIndex;
+        for (var i = 0; i < arrayOfRowColComment.length; i++) {
+          var rowColComment = arrayOfRowColComment[i];
+          var move = createMove(state.board, rowColComment.brow, rowColComment.bcol, rowColComment.arow, rowColComment.acol, turnIndex);
+          var stateAfterMove = {board : move[1].set.value, delta: move[2].set.value};
+          
+          exampleMoves.push({
+            stateBeforeMove: state,
+            stateAfterMove: stateAfterMove,
+            turnIndexBeforeMove: turnIndex,
+            turnIndexAfterMove: 1 - turnIndex,
+            move: move,
+            comment: {en: rowColComment.comment}});
+            
+          state = stateAfterMove;
+          turnIndex = 1 - turnIndex;
+        }
+        return exampleMoves;
+    }
+    
+    
+    function getRiddles() {
+    	return getExampleMoves(1, {board:
+            [['W', '', '', '', 'R', '', '', ''],
+             ['W', 'W', 'W', '', '', '', '', ''],
+             ['W', 'R', 'W', 'R', '', '', '', ''],
+             ['W', '', 'R', '', '', '', '', 'R'], 
+             ['W', '', '', 'R', '', 'W', '', ''],
+             ['W', '', 'W', '', '', '', '', ''], 
+             ['', '', 'W', 'R', '', '', '', ''], 
+             ['', 'R', 'R', 'R', 'R', 'R', '', '']], 
+             delta: {brow: 0, bcol: 0, arow: 0, acol: 0}}, 
+             [
+          {brow: 0, bcol: 4, arow: 2, acol: 4, comment: "find the position for red where he could win the game"},
+          {brow: 4, bcol: 5, arow: 2, acol: 5, comment: "white moves (4,5) to (2,5)"},
+          {brow: 7, bcol: 5, arow: 5, acol: 3, comment: "red moves (7,5) to (5,3)"},
+          {brow: 2, bcol: 5, arow: 1, acol: 4, comment: "white moves (2,5) to (1,4)"},
+          {brow: 3, bcol: 7, arow: 3, acol: 4, comment: "red moves (3,7) to (3,4), red wins"}
+        ]);
+      }
+    
+
+    function getExampleGame() {
+        return getExampleMoves(0, {board:
+            [['', 'R', 'R', 'R', 'R', 'R', 'R', ''],
+             ['W', '', '', '', '', '', '', 'W'],
+             ['W', '', '', '', '', '', '', 'W'],
+             ['W', '', '', '', '', '', '', 'W'], 
+             ['W', '', '', '', '', '', '', 'W'],
+             ['W', '', '', '', '', '', '', 'W'], 
+             ['W', '', '', '', '', '', '', 'W'], 
+             ['', 'R', 'R', 'R', 'R', 'R', 'R', '']], 
+             delta: {brow: 0, bcol: 0, arow: 0, acol: 0}}, 
+             [
+          {brow: 1, bcol: 0, arow: 1, acol: 2, comment: "The classic opening: white moves (1,0) to (1,2)"},
+          {brow: 0, bcol: 3, arow: 2, acol: 3, comment: "red moves (0,2) to (2,3)"},
+          {brow: 1, bcol: 2, arow: 4, acol: 2, comment: "white moves (1,2) to (4,2)"},
+          {brow: 0, bcol: 1, arow: 3, acol: 4, comment: "red moves (0,1) to (3,4)"},
+          {brow: 6, bcol: 0, arow: 6, acol: 2, comment: "white moves (6,0) to (6,2)"},
+          {brow: 0, bcol: 5, arow: 3, acol: 2, comment: "red moves (0,5) to (3,2)"},
+          {brow: 5, bcol: 0, arow: 5, acol: 2, comment: "white moves (5,0) to (5,2)"},
+          {brow: 0, bcol: 2, arow: 2, acol: 4, comment: "red moves (0,2) to (2,4)"},
+          {brow: 6, bcol: 7, arow: 6, acol: 5, comment: "white moves (6,7) to (6,5)"},
+          {brow: 0, bcol: 4, arow: 2, acol: 6, comment: "red moves (0,4) to (2,6)"},
+          {brow: 5, bcol: 7, arow: 0, acol: 7, comment: "white moves (5,7) to (0,7)"},
+          {brow: 0, bcol: 6, arow: 3, acol: 6, comment: "red moves (0,6) to (3,6)"},
+          {brow: 0, bcol: 7, arow: 0, acol: 6, comment: "white moves (0,7) to (0,6)"},
+          {brow: 3, bcol: 6, arow: 6, acol: 3, comment: "red moves (3,6) to (6,3)"},
+          {brow: 6, bcol: 5, arow: 4, acol: 5, comment: "white moves (6,5) to (4,5)"},
+          {brow: 2, bcol: 6, arow: 2, acol: 1, comment: "red moves (2,6) to (2,1)"},
+          {brow: 4, bcol: 7, arow: 3, acol: 6, comment: "white moves (4,7) to (3,6)"},
+          {brow: 7, bcol: 6, arow: 4, acol: 3, comment: "red moves (7,6) to (4,3)"},
+          {brow: 2, bcol: 0, arow: 5, acol: 0, comment: "white moves (2,0) to (5,0)"},
+          {brow: 7, bcol: 5, arow: 5, acol: 3, comment: "red moves (7,5) to (5,3), red wins!"}
+        ]);
+      }
   
     //params: {turnIndexBeforeMove: 0,
     //         stateBeforeMove: {},
@@ -256,12 +336,10 @@ var isMoveOk = (function(){
         var turnIndexBeforeMove = params.turnIndexBeforeMove;
         var stateBeforeMove = params.stateBeforeMove;
         try{
-            var before = move[2].set.value;
-            var after = move[3].set.value;
-            var brow = before.row;
-            var bcol = before.col;
-            var arow = after.row;
-            var acol = after.col;
+            var brow = move[2].set.value.brow;
+            var bcol = move[2].set.value.bcol;
+            var arow = move[2].set.value.arow;
+            var acol = move[2].set.value.acol;
             var board = stateBeforeMove.board;
             //test if a player can make a move in this position;
             if(!isMoveLegal(board, brow, bcol, arow, acol, turnIndexBeforeMove)){
@@ -276,217 +354,31 @@ var isMoveOk = (function(){
         }
         return true;
     }
-
-    console.log(
-        [
-    	//white checker from [1, 0] to [1, 2]: OK
-        isMoveOK(
-        		{   
-        			turnIndexBeforeMove: 0, 
-        	        stateBeforeMove: {board:
-        	        	                 [['', 'R', 'R', 'R', 'R', 'R', 'R', ''],
-        	        	                  ['W', '', '', '', '', '', '', 'W'],
-        	        	                  ['W', '', '', '', '', '', '', 'W'],
-        	        	                  ['W', '', '', '', '', '', '', 'W'], 
-        	        	                  ['W', '', '', '', '', '', '', 'W'],
-        	        	                  ['W', '', '', '', '', '', '', 'W'], 
-        	        	                  ['W', '', '', '', '', '', '', 'W'], 
-        	        	                  ['', 'R', 'R', 'R', 'R', 'R', 'R', '']], 
-        	        	              delta: {row: 0, col: 0}}, 
-        	        move: [
-        	               {setTurn: {turnIndex : 1}},
-        	               {set: {key: 'board', value: [['', 'R', 'R', 'R', 'R', 'R', 'R', ''],
-        	          	        	                  ['', '', 'W', '', '', '', '', 'W'],
-        	        	        	                  ['W', '', '', '', '', '', '', 'W'],
-        	        	        	                  ['W', '', '', '', '', '', '', 'W'], 
-        	        	        	                  ['W', '', '', '', '', '', '', 'W'],
-        	        	        	                  ['W', '', '', '', '', '', '', 'W'], 
-        	        	        	                  ['W', '', '', '', '', '', '', 'W'], 
-        	        	        	                  ['', 'R', 'R', 'R', 'R', 'R', 'R', '']]}},
-        	               {set: {key: 'before', value: {row: 1, col: 0}}},
-        	               {set: {key: 'after', value: {row: 1, col: 2}}}
-        	              ]
-        	    }),
-        
-        //white checker from [1, 0] to [1, 3]: Not OK!!! Jump to far!!!
-        isMoveOK(
-        		{   
-        			turnIndexBeforeMove: 0, 
-        	        stateBeforeMove: {board:
-        	        	                 [['', 'R', 'R', 'R', 'R', 'R', 'R', ''],
-        	        	                  ['W', '', '', '', '', '', '', 'W'],
-        	        	                  ['W', '', '', '', '', '', '', 'W'],
-        	        	                  ['W', '', '', '', '', '', '', 'W'], 
-        	        	                  ['W', '', '', '', '', '', '', 'W'],
-        	        	                  ['W', '', '', '', '', '', '', 'W'], 
-        	        	                  ['W', '', '', '', '', '', '', 'W'], 
-        	        	                  ['', 'R', 'R', 'R', 'R', 'R', 'R', '']], 
-        	        	              delta: {row: 0, col: 0}}, 
-        	        move: [
-        	               {setTurn: {turnIndex : 1}},
-        	               {set: {key: 'board', value: [['', 'R', 'R', 'R', 'R', 'R', 'R', ''],
-        	          	        	                  ['', '', '', 'W', '', '', '', 'W'],
-        	        	        	                  ['W', '', '', '', '', '', '', 'W'],
-        	        	        	                  ['W', '', '', '', '', '', '', 'W'], 
-        	        	        	                  ['W', '', '', '', '', '', '', 'W'],
-        	        	        	                  ['W', '', '', '', '', '', '', 'W'], 
-        	        	        	                  ['W', '', '', '', '', '', '', 'W'], 
-        	        	        	                  ['', 'R', 'R', 'R', 'R', 'R', 'R', '']]}},
-        	               {set: {key: 'before', value: {row: 1, col: 0}}},
-        	               {set: {key: 'after', value: {row: 1, col: 3}}}
-        	              ]
-        	    }),
-        
-      //red checker from [0, 1] to [3, 4]: Not OK!!! Jump over enemy!!!
-        isMoveOK(
-        		{   
-        			turnIndexBeforeMove: 1, 
-        	        stateBeforeMove: {board:
-        	        	                 [['', 'R', 'R', 'R', 'R', 'R', 'R', ''],
-        	        	                  ['', '', 'W', '', '', '', '', 'W'],
-        	        	                  ['W', '', '', '', '', '', '', 'W'],
-        	        	                  ['W', '', '', '', '', '', '', 'W'], 
-        	        	                  ['W', '', '', '', '', '', '', 'W'],
-        	        	                  ['W', '', '', '', '', '', '', 'W'], 
-        	        	                  ['W', '', '', '', '', '', '', 'W'], 
-        	        	                  ['', 'R', 'R', 'R', 'R', 'R', 'R', '']], 
-        	        	              delta: {row: 0, col: 0}}, 
-        	        move: [
-        	               {setTurn: {turnIndex : 0}},
-        	               {set: {key: 'board', value: [['', '', 'R', 'R', 'R', 'R', 'R', ''],
-        	          	        	                  ['', '', 'W', '', '', '', '', 'W'],
-        	        	        	                  ['W', '', '', '', '', '', '', 'W'],
-        	        	        	                  ['W', '', '', '', 'R', '', '', 'W'], 
-        	        	        	                  ['W', '', '', '', '', '', '', 'W'],
-        	        	        	                  ['W', '', '', '', '', '', '', 'W'], 
-        	        	        	                  ['W', '', '', '', '', '', '', 'W'], 
-        	        	        	                  ['', 'R', 'R', 'R', 'R', 'R', 'R', '']]}},
-        	               {set: {key: 'before', value: {row: 0, col: 1}}},
-        	               {set: {key: 'after', value: {row: 3, col: 4}}}
-        	              ]
-        	    }),
-        
-        //red from [0, 4] to [2, 2]: OK.
-        isMoveOK(
-        		{   
-        			turnIndexBeforeMove: 1, 
-        	        stateBeforeMove: {board:
-        	        	                 [['', 'R', 'R', 'R', 'R', 'R', 'R', ''],
-        	        	                  ['', '', 'W', '', '', '', '', 'W'],
-        	        	                  ['W', '', '', '', '', '', '', 'W'],
-        	        	                  ['W', '', '', '', '', '', '', 'W'], 
-        	        	                  ['W', '', '', '', '', '', '', 'W'],
-        	        	                  ['W', '', '', '', '', '', '', 'W'], 
-        	        	                  ['W', '', '', '', '', '', '', 'W'], 
-        	        	                  ['', 'R', 'R', 'R', 'R', 'R', 'R', '']], 
-        	        	              delta: {row: 0, col: 0}}, 
-        	        move: [
-        	               {setTurn: {turnIndex : 0}},
-        	               {set: {key: 'board', value: [['', 'R', 'R', 'R', '', 'R', 'R', ''],
-        	          	        	                  ['', '', 'W', '', '', '', '', 'W'],
-        	        	        	                  ['W', '', 'R', '', '', '', '', 'W'],
-        	        	        	                  ['W', '', '', '', '', '', '', 'W'], 
-        	        	        	                  ['W', '', '', '', '', '', '', 'W'],
-        	        	        	                  ['W', '', '', '', '', '', '', 'W'], 
-        	        	        	                  ['W', '', '', '', '', '', '', 'W'], 
-        	        	        	                  ['', 'R', 'R', 'R', 'R', 'R', 'R', '']]}},
-        	               {set: {key: 'before', value: {row: 0, col: 4}}},
-        	               {set: {key: 'after', value: {row: 2, col: 2}}}
-        	              ]
-        	    }),
-        
-        //red from [0, 2] to [3, 2]: OK, jump over friendly checker[2, 2]
-        isMoveOK(
-        		{   
-        			turnIndexBeforeMove: 1, 
-        	        stateBeforeMove: {board:
-        	        						[['', 'R', 'R', 'R', '', 'R', 'R', ''],
-        	        						 ['', '', '', 'W', '', '', '', 'W'],
-        	        						 ['W', '', 'R', '', '', '', '', 'W'],
-        	        						 ['W', '', '', '', '', '', '', 'W'], 
-        	        						 ['W', '', '', '', '', '', '', 'W'],
-        	        						 ['W', '', '', '', '', '', '', 'W'], 
-        	        						 ['W', '', '', '', '', '', '', 'W'], 
-        	        						 ['', 'R', 'R', 'R', 'R', 'R', 'R', '']], 
-        	        	              delta: {row: 0, col: 0}}, 
-        	        move: [
-        	               {setTurn: {turnIndex : 0}},
-        	               {set: {key: 'board', value: [['', 'R', '', 'R', '', 'R', 'R', ''],
-        	          	        	                  ['', '', '', 'W', '', '', '', 'W'],
-        	        	        	                  ['W', '', 'R', '', '', '', '', 'W'],
-        	        	        	                  ['W', '', 'R', '', '', '', '', 'W'], 
-        	        	        	                  ['W', '', '', '', '', '', '', 'W'],
-        	        	        	                  ['W', '', '', '', '', '', '', 'W'], 
-        	        	        	                  ['W', '', '', '', '', '', '', 'W'], 
-        	        	        	                  ['', 'R', 'R', 'R', 'R', 'R', 'R', '']]}},
-        	               {set: {key: 'before', value: {row: 0, col: 2}}},
-        	               {set: {key: 'after', value: {row: 3, col: 2}}}
-        	              ]
-        	    }),
-        
-      //red from [0, 2] to [3, 2]: Not OK!!! expected move does not agree with move in parameter!!!
-        isMoveOK(
-        		{   
-        			turnIndexBeforeMove: 1, 
-        	        stateBeforeMove: {board:
-        	        						[['', 'R', 'R', 'R', '', 'R', 'R', ''],
-        	        						 ['', '', '', 'W', '', '', '', 'W'],
-        	        						 ['W', '', 'R', '', '', '', '', 'W'],
-        	        						 ['W', '', '', '', '', '', '', 'W'], 
-        	        						 ['W', '', '', '', '', '', '', 'W'],
-        	        						 ['W', '', '', '', '', '', '', 'W'], 
-        	        						 ['W', '', '', '', '', '', '', 'W'], 
-        	        						 ['', 'R', 'R', 'R', 'R', 'R', 'R', '']], 
-        	        	              delta: {row: 0, col: 0}}, 
-        	        move: [
-        	               {setTurn: {turnIndex : 0}},
-        	               {set: {key: 'board', value: [['', 'R', '', 'R', '', 'R', 'R', ''],
-        	          	        	                  ['', '', '', 'W', '', '', '', 'W'],
-        	        	        	                  ['W', '', 'R', '', '', '', '', 'W'],
-        	        	        	                  ['W', '', '', '', '', '', '', 'W'], 
-        	        	        	                  ['W', '', 'R', '', '', '', '', 'W'],
-        	        	        	                  ['W', '', '', '', '', '', '', 'W'], 
-        	        	        	                  ['W', '', '', '', '', '', '', 'W'], 
-        	        	        	                  ['', 'R', 'R', 'R', 'R', 'R', 'R', '']]}},
-        	               {set: {key: 'before', value: {row: 0, col: 2}}},
-        	               {set: {key: 'after', value: {row: 3, col: 2}}}
-        	              ]
-        	    }),
-        
-        //red [7, 6] to [7, 3]: OK, and red wins!!!
-        isMoveOK(
-        		{   
-        			turnIndexBeforeMove: 1, 
-        	        stateBeforeMove: {board:
-        	        						[['', 'R', 'R', 'R', '', '', '', ''],
-        	        						 ['', '', 'R', 'W', '', '', '', 'W'],
-        	        						 ['W', '', 'R', '', '', '', '', 'W'],
-        	        						 ['W', 'R', '', '', '', '', '', 'W'], 
-        	        						 ['W', '', 'R', '', '', '', '', 'W'],
-        	        						 ['W', '', 'R', '', '', '', '', 'W'], 
-        	        						 ['W', '', 'R', '', '', '', '', 'W'], 
-        	        						 ['', 'R', 'R', '', '', '', 'R', '']], 
-        	        	              delta: {row: 0, col: 0}}, 
-        	        move: [
-        	               {endMatch: {endMatchScores: [0, 1]}},
-        	               {set: {key: 'board', value: [['', 'R', 'R', 'R', '', '', '', ''],
-        	        	        						 ['', '', 'R', 'W', '', '', '', 'W'],
-        	        	        						 ['W', '', 'R', '', '', '', '', 'W'],
-        	        	        						 ['W', 'R', '', '', '', '', '', 'W'], 
-        	        	        						 ['W', '', 'R', '', '', '', '', 'W'],
-        	        	        						 ['W', '', 'R', '', '', '', '', 'W'], 
-        	        	        						 ['W', '', 'R', '', '', '', '', 'W'], 
-        	        	        						 ['', 'R', 'R', 'R', '', '', '', '']]}},
-        	               {set: {key: 'before', value: {row: 7, col: 6}}},
-        	               {set: {key: 'after', value: {row: 7, col: 3}}}
-        	              ]
-        	    }),
-          ]
-    );
-    return isMoveOk;
+    
+    //test the example game;
+    var moves = getExampleGame();
+    for(var i=0; i<moves.length; i++){
+    	var move = {
+    			turnIndexBeforeMove: moves[i].turnIndexBeforeMove,
+    			stateBeforeMove: moves[i].stateBeforeMove,
+    			move: moves[i].move
+    	}
+    	console.log(isMoveOK(move));
+    }
+    
+    //test the riddle;
+    moves = getRiddles();
+    for(var i=0; i<moves.length; i++){
+    	var move = {
+    			turnIndexBeforeMove: moves[i].turnIndexBeforeMove,
+    			stateBeforeMove: moves[i].stateBeforeMove,
+    			move: moves[i].move
+    	}
+    	console.log(isMoveOK(move));
+    }
+    
+    
+    return {isMoveOk: isMoveOk, getExampleGame: getExampleGame, getRiddles: getRiddles};
 })();
-
-
-
 
 
