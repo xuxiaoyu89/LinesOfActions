@@ -1,4 +1,4 @@
-var isMoveOk = (function(){
+var LinesOfActionsLogic = (function(){
     function isEqual(object1, object2){
         return JSON.stringify(object1) === JSON.stringify(object2);
     }
@@ -18,43 +18,47 @@ var isMoveOk = (function(){
     	stack.push([r,c]);
     	while(stack.length !== 0){
     		var curr = stack.pop();
-    		//console.log(curr);
+    		console.log(curr);
     		var row = curr[0];
     		var col = curr[1];
+    		
     		if(row+1<8 && col+1<8){
     			if(visited[row+1][col+1] === false){
     				if(board[row+1][col+1] === id){
-    					//console.log(1);
+    					console.log(1);
         				stack.push([row+1, col+1]);
         				count++;
         				visited[row+1][col+1] = true;
         			}	
     			}
     		}
+    		
+    		//upper left must have been visited
+    		/*
     		if(row-1>=0 && col-1>=0){
     			if(visited[row-1][col-1] === false){
     				if(board[row-1][col-1] === id){
-    					//console.log(2);
+    					console.log(2);
         				stack.push([row-1, col-1]);
         				count++;
         				visited[row-1][col-1] = true;
         			}	
     			}
-    		}
+    		}*/
     		if(row+1<8 && col-1>=0){
     			if(visited[row+1][col-1] === false){
     				if(board[row+1][col-1] === id){
-    					//console.log(3);
+    					console.log(3);
         				stack.push([row+1, col-1]);
         				count++;
         				visited[row+1][col-1] = true;
         			}	
     			}
     		}
-    		if(row-1>=8 && col+1<8){
+    		if(row-1>=0 && col+1<8){
     			if(visited[row-1][col+1] === false){
     				if(board[row-1][col+1] === id){
-    					//console.log(4);
+    					console.log(4);
         				stack.push([row-1, col+1]);
         				count++;
         				visited[row-1][col+1] = true;
@@ -64,7 +68,7 @@ var isMoveOk = (function(){
     		if(row+1<8){
     			if(visited[row+1][col] === false){
     				if(board[row+1][col] === id){
-    					//console.log(5);
+    					console.log(5);
         				stack.push([row+1, col]);
         				count++;
         				visited[row+1][col] = true;
@@ -74,7 +78,7 @@ var isMoveOk = (function(){
     		if(row-1>=0){
     			if(visited[row-1][col] === false){
     				if(board[row-1][col] === id){
-    					//console.log(6);
+    					console.log(6);
         				stack.push([row-1, col]);
         				count++;
         				visited[row-1][col] = true;
@@ -84,7 +88,7 @@ var isMoveOk = (function(){
     		if(col+1<8){
     			if(visited[row][col+1] === false){
     				if(board[row][col+1] === id){
-    					//console.log(7);
+    					console.log(7);
         				stack.push([row, col+1]);
         				count++;
         				visited[row][col+1] = true;
@@ -94,7 +98,7 @@ var isMoveOk = (function(){
     		if(col-1>=0){
     			if(visited[row][col-1] === false){
     				if(board[row][col-1] === id){
-    					//console.log(8);
+    					console.log(8);
         				stack.push([row, col-1]);
         				count++;
         				visited[row][col-1] = true;
@@ -102,7 +106,7 @@ var isMoveOk = (function(){
     			}
     		}
     	}
-    	//console.log(count);
+    	console.log("count: " + count);
     	if(count === 12) return true;
     	else return false;
     }
@@ -273,7 +277,7 @@ var isMoveOk = (function(){
     
     
     function getRiddles() {
-    	return getExampleMoves(1, {board:
+    	return [getExampleMoves(1, {board:
             [['W', '', '', '', 'R', '', '', ''],
              ['W', 'W', 'W', '', '', '', '', ''],
              ['W', 'R', 'W', 'R', '', '', '', ''],
@@ -289,7 +293,8 @@ var isMoveOk = (function(){
           {brow: 7, bcol: 5, arow: 5, acol: 3, comment: "red moves (7,5) to (5,3)"},
           {brow: 2, bcol: 5, arow: 1, acol: 4, comment: "white moves (2,5) to (1,4)"},
           {brow: 3, bcol: 7, arow: 3, acol: 4, comment: "red moves (3,7) to (3,4), red wins"}
-        ]);
+        ])
+    	]
       }
     
 
@@ -355,6 +360,7 @@ var isMoveOk = (function(){
         return true;
     }
     
+    /*
     //test the example game;
     var moves = getExampleGame();
     for(var i=0; i<moves.length; i++){
@@ -376,9 +382,25 @@ var isMoveOk = (function(){
     	}
     	console.log(isMoveOK(move));
     }
+    */
     
     
-    return {isMoveOk: isMoveOk, getExampleGame: getExampleGame, getRiddles: getRiddles};
+    return {isMoveOK: isMoveOK, getExampleGame: getExampleGame, getRiddles: getRiddles};
 })();
+
+/*
+isWinner(2, 1, [['W', '', '', '', '', '', '', ''],
+  	             ['W', 'W', 'W', '', '', 'W', '', ''],
+	             ['W', 'R', 'W', 'R', 'R', '', '', ''],
+	             ['W', '', 'R', '', 'R', '', '', ''], 
+	             ['W', '', '', 'R', '', '', '', ''],
+	             ['W', '', 'W', 'R', '', '', '', ''], 
+	             ['', '', 'W', 'R', '', '', '', ''], 
+	             ['', 'R', 'R', 'R', 'R', '', '', '']])
+
+*/
+
+
+
 
 
