@@ -1,6 +1,6 @@
 describe("In LinesOfAction", function(){	
     function expectMoveOK(turnIndexBeforeMove, stateBeforeMove, move){
-    	expect(LinesOfActionsLogic.isMoveOK(
+    	expect(gameLogic.isMoveOK(
     	{turnIndexBeforeMove: turnIndexBeforeMove,
     	 stateBeforeMove: stateBeforeMove,
     	 move: move
@@ -9,7 +9,7 @@ describe("In LinesOfAction", function(){
     }
     
     function expectIllegalMove(turnIndexBeforeMove, stateBeforeMove, move){
-    	expect(LinesOfActionsLogic.isMoveOK({
+    	expect(gameLogic.isMoveOK({
     		turnIndexBeforeMove: turnIndexBeforeMove,
        	    stateBeforeMove: stateBeforeMove,
        	    move: move
@@ -18,17 +18,7 @@ describe("In LinesOfAction", function(){
     
     it("white moves (1,0) to (1,2) from initial state is legal", function(){
     	expectMoveOK(0,
-    			{board:
-    	            [['', 'R', 'R', 'R', 'R', 'R', 'R', ''],
-    	             ['W', '', '', '', '', '', '', 'W'],
-    	             ['W', '', '', '', '', '', '', 'W'],
-    	             ['W', '', '', '', '', '', '', 'W'], 
-    	             ['W', '', '', '', '', '', '', 'W'],
-    	             ['W', '', '', '', '', '', '', 'W'], 
-    	             ['W', '', '', '', '', '', '', 'W'], 
-    	             ['', 'R', 'R', 'R', 'R', 'R', 'R', '']], 
-    	         delta: {brow: 0, bcol: 0, arow: 0, acol: 0}
-    	         }, 
+    			{}, 
     	         [
 	               {setTurn: {turnIndex : 1}},
 	               {set: {key: 'board', value: [['', 'R', 'R', 'R', 'R', 'R', 'R', ''],
@@ -45,17 +35,7 @@ describe("In LinesOfAction", function(){
     
     it("white moves (1,0) to (1,3) from initial state is legal: wrong distance", function(){
     	expectIllegalMove(0,
-    			{board:
-    	            [['', 'R', 'R', 'R', 'R', 'R', 'R', ''],
-    	             ['W', '', '', '', '', '', '', 'W'],
-    	             ['W', '', '', '', '', '', '', 'W'],
-    	             ['W', '', '', '', '', '', '', 'W'], 
-    	             ['W', '', '', '', '', '', '', 'W'],
-    	             ['W', '', '', '', '', '', '', 'W'], 
-    	             ['W', '', '', '', '', '', '', 'W'], 
-    	             ['', 'R', 'R', 'R', 'R', 'R', 'R', '']], 
-    	         delta: {brow: 1, bcol: 0, arow: 1, acol: 2}
-    	         }, 
+    			{}, 
     	         [
 	               {setTurn: {turnIndex : 1}},
 	               {set: {key: 'board', value: [['', 'R', 'R', 'R', 'R', 'R', 'R', ''],
@@ -73,17 +53,7 @@ describe("In LinesOfAction", function(){
     
     it("white moves (0,0) to (1,2) from initial state is legal: no checker in (0,0)", function(){
     	expectIllegalMove(0,
-    			{board:
-    	            [['', 'R', 'R', 'R', 'R', 'R', 'R', ''],
-    	             ['W', '', '', '', '', '', '', 'W'],
-    	             ['W', '', '', '', '', '', '', 'W'],
-    	             ['W', '', '', '', '', '', '', 'W'], 
-    	             ['W', '', '', '', '', '', '', 'W'],
-    	             ['W', '', '', '', '', '', '', 'W'], 
-    	             ['W', '', '', '', '', '', '', 'W'], 
-    	             ['', 'R', 'R', 'R', 'R', 'R', 'R', '']], 
-    	         delta: {brow: 0, bcol: 0, arow: 0, acol: 0}
-    	         }, 
+    			{}, 
     	         [
 	               {setTurn: {turnIndex : 1}},
 	               {set: {key: 'board', value: [['', 'R', 'R', 'R', 'R', 'R', 'R', ''],
@@ -455,17 +425,7 @@ describe("In LinesOfAction", function(){
     
     it("white moves (1,0) to (1,2) from initial state is legal, but: afterstate not agree with the expected afterstate", function(){
     	expectIllegalMove(0,
-    			{board:
-    	            [['', 'R', 'R', 'R', 'R', 'R', 'R', ''],
-    	             ['W', '', '', '', '', '', '', 'W'],
-    	             ['W', '', '', '', '', '', '', 'W'],
-    	             ['W', '', '', '', '', '', '', 'W'], 
-    	             ['W', '', '', '', '', '', '', 'W'],
-    	             ['W', '', '', '', '', '', '', 'W'], 
-    	             ['W', '', '', '', '', '', '', 'W'], 
-    	             ['', 'R', 'R', 'R', 'R', 'R', 'R', '']], 
-    	         delta: {brow: 1, bcol: 0, arow: 1, acol: 2}
-    	         }, 
+    			{}, 
     	         [
 	               {setTurn: {turnIndex : 1}},
 	               {set: {key: 'board', value: [['', 'R', 'R', 'R', 'R', 'R', 'R', ''],
@@ -483,17 +443,7 @@ describe("In LinesOfAction", function(){
     
     it("white moves (1,0) to (1,2) from initial state is legal, but: no borad in after state", function(){
     	expectIllegalMove(0,
-    			{board:
-    	            [['', 'R', 'R', 'R', 'R', 'R', 'R', ''],
-    	             ['W', '', '', '', '', '', '', 'W'],
-    	             ['W', '', '', '', '', '', '', 'W'],
-    	             ['W', '', '', '', '', '', '', 'W'], 
-    	             ['W', '', '', '', '', '', '', 'W'],
-    	             ['W', '', '', '', '', '', '', 'W'], 
-    	             ['W', '', '', '', '', '', '', 'W'], 
-    	             ['', 'R', 'R', 'R', 'R', 'R', 'R', '']], 
-    	         delta: {brow: 1, bcol: 0, arow: 1, acol: 2}
-    	         }, 
+    			{}, 
     	         [
 	               {setTurn: {turnIndex : 1}},
 	               {set: {key: 'delta', value: {brow: 1, bcol: 0, arow: 1, acol: 2}}}
@@ -511,13 +461,13 @@ describe("In LinesOfAction", function(){
       }
     
     it("getExampleGame returns a legal history and the last move ends the game", function() {
-        var exampleGame = LinesOfActionsLogic.getExampleGame();
+        var exampleGame = gameLogic.getExampleGame();
         expect(exampleGame.length).toBe(20);
         expectLegalHistoryThatEndsTheGame(exampleGame);
       });
     
     it("getRiddles returns legal histories where the last move ends the game", function() {
-        var riddles = LinesOfActionsLogic.getRiddles();
+        var riddles = gameLogic.getRiddles();
         expect(riddles.length).toBe(1);
         for (var i = 0; i < riddles.length; i++) {
           expectLegalHistoryThatEndsTheGame(riddles[i]);
