@@ -276,6 +276,16 @@ angular.module('myApp.gameLogic', []).service('gameLogic', function() {
         return exampleMoves;
     }
     
+    function getInitialBoard(){
+    	return [['', 'R', 'R', 'R', 'R', 'R', 'R', ''],
+  	             ['W', '', '', '', '', '', '', 'W'],
+	             ['W', '', '', '', '', '', '', 'W'],
+	             ['W', '', '', '', '', '', '', 'W'], 
+	             ['W', '', '', '', '', '', '', 'W'],
+	             ['W', '', '', '', '', '', '', 'W'], 
+	             ['W', '', '', '', '', '', '', 'W'], 
+	             ['', 'R', 'R', 'R', 'R', 'R', 'R', '']];
+    }
     
     function getRiddles() {
     	return [getExampleMoves(1, {board:
@@ -363,6 +373,8 @@ angular.module('myApp.gameLogic', []).service('gameLogic', function() {
         return true;
     }
     
+    this.createMove = createMove;
+    this.getInitialBoard = getInitialBoard;
     this.isMoveOk = isMoveOk;
     this.getExampleGame = getExampleGame;
     this.getRiddles = getRiddles;

@@ -1,42 +1,28 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="myApp">
+<html lang="en" ng-app="myApp" class="ng-scope">
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>TicTacToe</title>
+  <title>LinesOfAction</title>
   <meta name="description" content="TicTacToe game">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="components/angular/angular.js"></script>
   <script src="game.js"></script>
   <script src="gameLogic.js"></script>
   <script src="messageService.js"></script>
+  <script src="scaleBodyService.js"></script>
+  <style type="text/css"></style>
   <!-- for local testing purposes ! -->
   <script src="http://yoav-zibin.github.io/emulator/platform.js"></script>
+  <link rel="stylesheet" type="text/css" href="game.css">
 </head>
-<body ng-controller="Ctrl">
-  <textarea ng-model="jsonState" rows=10 cols=100 readonly></textarea>
-  <table border="1">
-    <tr ng-repeat="row in board track by $index" width="50px" height="50px">
-      <td ng-repeat="cell in row track by $index" width="50px" height="50px">
+<body ng-controller="Ctrl" class="ng-scope">
+  <table>
+    <tr ng-repeat="row in board track by $index" class="ng-scope">
+      <td ng-repeat="cell in row track by $index" ng-class="{cell: true, l: $index<1, t: $parent.$index<1 }" ng-click="cellClicked($parent.$index, $index)">
         {{cell}}
       </td>
     </tr>
   </table>
-  <textarea rows=10 cols=100 readonly>
-    All operations in GameApi:
-    [
-      {setTurn: {turnIndex: 1}},
-      {set: {key: "k", value: "v"}},
-      {endMatch: {endMatchScores: [42, -2]}},
-      {set: {key: "k", value: "v", visibleToPlayerIndexes: [0]}},
-      {setVisibility: {key: "k", visibleToPlayerIndexes: null}},
-      {shuffle: {keys: ["k1", "k2"]}},
-      {setRandomInteger: {key: "k", from: 0, to: 6}},
-      {"delete": {key: "k"}}
-    ]
-  </textarea>
-  <textarea ng-model="move" rows=10 cols=100></textarea>
-  <br>
-  <button ng-click="makeMove()">Make move</button>
 </body>
 </html>
