@@ -1,28 +1,37 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="myApp" class="ng-scope">
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>LinesOfAction</title>
-  <meta name="description" content="TicTacToe game">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <script src="components/angular/angular.js"></script>
-  <script src="game.js"></script>
-  <script src="gameLogic.js"></script>
-  <script src="messageService.js"></script>
-  <script src="scaleBodyService.js"></script>
-  <style type="text/css"></style>
-  <!-- for local testing purposes ! -->
-  <script src="http://yoav-zibin.github.io/emulator/platform.js"></script>
-  <link rel="stylesheet" type="text/css" href="game.css">
-</head>
-<body ng-controller="Ctrl" class="ng-scope">
-  <table>
-    <tr ng-repeat="row in board track by $index" class="ng-scope">
-      <td ng-repeat="cell in row track by $index" ng-class="{cell: true, l: $index<1, t: $parent.$index<1 }" ng-click="cellClicked($parent.$index, $index)">
-        {{cell}}
-      </td>
-    </tr>
-  </table>
-</body>
+    <head>
+        <meta charset="utf-8">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                <title>LinesOfAction</title>
+                <meta name="description" content="LinesOfActions game">
+                    <meta name="viewport" content="width=device-width, initial-scale=1">
+                        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+                        <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
+                        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.21/angular.min.js"></script>
+                        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.21/angular-touch.min.js"></script>
+                        <script src="http://yoav-zibin.github.io/emulator/angular-dragdrop.1.0.8.min.js"></script>
+                        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.21/angular-route.js"></script>
+                        <script src="node_modules/angular-animate/angular-animate.js"></script>
+                        <script src="game.js"></script>
+                        <script src="gameLogic.js"></script>
+                        <script src="http://yoav-zibin.github.io/emulator/gameService.js"></script>
+                        <script src="http://yoav-zibin.github.io/emulator/messageService.js"></script>
+                        <script src="http://yoav-zibin.github.io/emulator/scaleBodyService.js"></script>
+                        <script src="http://yoav-zibin.github.io/emulator/stateService.js"></script>
+                        <script src="http://yoav-zibin.github.io/emulator/platform.js"></script>
+                        <style type="text/css"></style>
+                        <link rel="stylesheet" type="text/css" href="game.css">
+    </head>
+    <body ng-controller="Ctrl" class="ng-scope">
+        <table>
+            <tr ng-repeat="row in board track by $index" class="ng-scope">
+                <td ng-repeat="cell in row track by $index" background="board.png" data-drop="droppable[$parent.$index][$index]" jqyoui-droppable="{onDrop: 'onDropCallback($parent.$index, $index)'}" ng-class="{cell: true, l: $index<1, t: $parent.$index<1 }" ng-click="cellClicked($parent.$index, $index)">
+                    <img ng-show="board[$parent.$index][$index]==='W'" data-drag="board[$parent.$index][$index]==='W'" data-jqyoui-options="{revert: 'invalid'}" jqyoui-draggable="{onStart: 'onStartCallback($parent.$index, $index)'}" src="white-checker.png">
+                    <img ng-show="board[$parent.$index][$index]==='R'" src="red-checker.png">
+                    
+                </td>
+            </tr>
+        </table>
+    </body>
 </html>

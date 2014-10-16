@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('myApp.gameLogic', []).service('gameLogic', function() {
+angular.module('myApp').service('gameLogic', function() {
 	
 	function isEqual(object1, object2){
 		return angular.equals(object1, object2);
@@ -21,14 +21,14 @@ angular.module('myApp.gameLogic', []).service('gameLogic', function() {
     	stack.push([r,c]);
     	while(stack.length !== 0){
     		var curr = stack.pop();
-    		console.log(curr);
+    		//console.log(curr);
     		var row = curr[0];
     		var col = curr[1];
     		
     		if(row+1<8 && col+1<8){
     			if(visited[row+1][col+1] === false){
     				if(board[row+1][col+1] === id){
-    					console.log(1);
+    					//console.log(1);
         				stack.push([row+1, col+1]);
         				count++;
         				visited[row+1][col+1] = true;
@@ -39,7 +39,7 @@ angular.module('myApp.gameLogic', []).service('gameLogic', function() {
     		if(row+1<8 && col-1>=0){
     			if(visited[row+1][col-1] === false){
     				if(board[row+1][col-1] === id){
-    					console.log(3);
+    					//console.log(3);
         				stack.push([row+1, col-1]);
         				count++;
         				visited[row+1][col-1] = true;
@@ -49,7 +49,7 @@ angular.module('myApp.gameLogic', []).service('gameLogic', function() {
     		if(row-1>=0 && col+1<8){
     			if(visited[row-1][col+1] === false){
     				if(board[row-1][col+1] === id){
-    					console.log(4);
+    					//console.log(4);
         				stack.push([row-1, col+1]);
         				count++;
         				visited[row-1][col+1] = true;
@@ -59,7 +59,7 @@ angular.module('myApp.gameLogic', []).service('gameLogic', function() {
     		if(row+1<8){
     			if(visited[row+1][col] === false){
     				if(board[row+1][col] === id){
-    					console.log(5);
+    					//console.log(5);
         				stack.push([row+1, col]);
         				count++;
         				visited[row+1][col] = true;
@@ -69,7 +69,7 @@ angular.module('myApp.gameLogic', []).service('gameLogic', function() {
     		if(row-1>=0){
     			if(visited[row-1][col] === false){
     				if(board[row-1][col] === id){
-    					console.log(6);
+    					//console.log(6);
         				stack.push([row-1, col]);
         				count++;
         				visited[row-1][col] = true;
@@ -79,7 +79,7 @@ angular.module('myApp.gameLogic', []).service('gameLogic', function() {
     		if(col+1<8){
     			if(visited[row][col+1] === false){
     				if(board[row][col+1] === id){
-    					console.log(7);
+    					//console.log(7);
         				stack.push([row, col+1]);
         				count++;
         				visited[row][col+1] = true;
@@ -89,7 +89,7 @@ angular.module('myApp.gameLogic', []).service('gameLogic', function() {
     		if(col-1>=0){
     			if(visited[row][col-1] === false){
     				if(board[row][col-1] === id){
-    					console.log(8);
+    					//console.log(8);
         				stack.push([row, col-1]);
         				count++;
         				visited[row][col-1] = true;
@@ -97,7 +97,7 @@ angular.module('myApp.gameLogic', []).service('gameLogic', function() {
     			}
     		}
     	}
-    	console.log("count: " + count);
+    	//console.log("count: " + count);
     	if(count === 12) return true;
     	else return false;
     }
@@ -123,6 +123,134 @@ angular.module('myApp.gameLogic', []).service('gameLogic', function() {
         if(isWinner(wrow, wcol, board)) return 'W';
         if(isWinner(rrow, rcol, board)) return 'R';
         return '';   
+    }
+    
+    function getStartRC(row, col, slope){
+    	if(slope == 0){
+    		return [row, 0];
+    	}
+    	if(slope  == 2){
+    		return [0, col];
+    	}
+    	if(slope == 1){
+    		if(row >= col){
+    			return [row-col, 0];
+    		}
+    		else{
+    			return [0, col-row];
+    		}
+    	}
+    	if(slope == -1){
+    		if((row+col)>=7){
+                return [7, row+col-7];
+            }
+            else{
+                return [row+col, 0];
+            }
+    	}
+    }
+    
+    function createComputerMove(board, turnIndexBeforeMove){
+    	var possibleMoves = [];
+    	var i, j;
+    	var slope;
+    	var startRC;
+    	var checkNum;
+    	var move;
+    	var friend = turnIndexBeforeMove === 0 ? 'W' : 'R';
+    	for(i=0; i<8; i++){
+    		for(j=0; j<8; j++){
+    			if(board[i][j] === friend){
+    	            //slope == 1;			
+    				startRC = getStartRC(i, j, 1);
+    				checkNum = getCheckNum(board, startRC[0], startRC[1], 1);
+    				if(isMoveLegal(board, i, j, i+checkNum, j+checkNum, turnIndexBeforeMove)){
+    					move = createMove(board, i, j, i+checkNum, j+checkNum, turnIndexBeforeMove);
+    					possibleMoves.push(move);
+    				}
+    				if(isMoveLegal(board, i, j, i-checkNum, j-checkNum, turnIndexBeforeMove)){
+    					move = createMove(board, i, j, i-checkNum, j-checkNum, turnIndexBeforeMove);
+    					possibleMoves.push(move);
+    				}
+    				//slope == -1;
+    				startRC = getStartRC(i, j, -1);
+    				checkNum = getCheckNum(board, startRC[0], startRC[1], -1);
+    				if(isMoveLegal(board, i, j, i+checkNum, j-checkNum, turnIndexBeforeMove)){
+    					move = createMove(board, i, j, i+checkNum, j-checkNum, turnIndexBeforeMove);
+    					possibleMoves.push(move);
+    				}
+    				if(isMoveLegal(board, i, j, i-checkNum, j+checkNum, turnIndexBeforeMove)){
+    					move = createMove(board, i, j, i-checkNum, j+checkNum, turnIndexBeforeMove);
+    					possibleMoves.push(move);
+    				}
+    				//slope == 0;
+    				startRC = getStartRC(i, j, 0);
+    				checkNum = getCheckNum(board, startRC[0], startRC[1], 0);
+    				if(isMoveLegal(board, i, j, i, j-checkNum, turnIndexBeforeMove)){
+    					move = createMove(board, i, j, i, j-checkNum, turnIndexBeforeMove);
+    					possibleMoves.push(move);
+    				}
+    				if(isMoveLegal(board, i, j, i, j+checkNum, turnIndexBeforeMove)){
+    					move = createMove(board, i, j, i, j+checkNum, turnIndexBeforeMove);
+    					possibleMoves.push(move);
+    				}
+    				//slope == 2;
+    				startRC = getStartRC(i, j, 2);
+    				checkNum = getCheckNum(board, startRC[0], startRC[1], 2);
+    				if(isMoveLegal(board, i, j, i-checkNum, j, turnIndexBeforeMove)){
+    					move = createMove(board, i, j, i-checkNum, j, turnIndexBeforeMove);
+    					possibleMoves.push(move);
+    				}
+    				if(isMoveLegal(board, i, j, i+checkNum, j, turnIndexBeforeMove)){
+    					move = createMove(board, i, j, i+checkNum, j, turnIndexBeforeMove);
+    					possibleMoves.push(move);
+    				}
+    			}
+    		}
+    	}
+    	var randomMove = possibleMoves[Math.floor(Math.random() * possibleMoves.length)];
+        return randomMove;	
+    }
+     
+    function getPossibleMoves(board, row, col, turnIndexBeforeMove){
+        var possibleMoves = [];
+        //slope == 1;			
+		var startRC = getStartRC(row, col, 1);
+		var checkNum = getCheckNum(board, startRC[0], startRC[1], 1);
+		if(isMoveLegal(board, row, col, row+checkNum, col+checkNum, turnIndexBeforeMove)){
+			possibleMoves.push([row+checkNum, col+checkNum]);
+		}
+		if(isMoveLegal(board, row, col, row-checkNum, col-checkNum, turnIndexBeforeMove)){
+			possibleMoves.push([row-checkNum, col-checkNum]);
+		}
+		//slope == -1;
+		startRC = getStartRC(row, col, -1);
+		checkNum = getCheckNum(board, startRC[0], startRC[1], -1);
+		if(isMoveLegal(board, row, col, row-checkNum, col+checkNum, turnIndexBeforeMove)){
+			possibleMoves.push([row-checkNum, col+checkNum]);
+		}
+		if(isMoveLegal(board, row, col, row+checkNum, col-checkNum, turnIndexBeforeMove)){
+			possibleMoves.push([row+checkNum, col-checkNum]);
+		}
+		//slope == 0;
+		startRC = getStartRC(row, col, 0);
+		checkNum = getCheckNum(board, startRC[0], startRC[1], 0);
+		if(isMoveLegal(board, row, col, row, col+checkNum, turnIndexBeforeMove)){
+			possibleMoves.push([row, col+checkNum]);
+		}
+		if(isMoveLegal(board, row, col, row, col-checkNum, turnIndexBeforeMove)){
+			possibleMoves.push([row, col-checkNum]);
+		}
+		//slope == 2;
+		startRC = getStartRC(row, col, 2);
+		checkNum = getCheckNum(board, startRC[0], startRC[1], 2);
+		if(isMoveLegal(board, row, col, row+checkNum, col, turnIndexBeforeMove)){
+			possibleMoves.push([row+checkNum, col]);
+		}
+		if(isMoveLegal(board, row, col, row-checkNum, col, turnIndexBeforeMove)){
+			possibleMoves.push([row-checkNum, col]);
+		}
+		return possibleMoves;
     }
 
     function createMove(board, brow, bcol, arow, acol, turnIndexBeforeMove){
@@ -175,7 +303,12 @@ angular.module('myApp.gameLogic', []).service('gameLogic', function() {
         return checkNum;
     }
     
+    
     function isMoveLegal(board, brow, bcol, arow, acol, turnIndexBeforeMove) {
+    	if(arow > 7 || arow < 0 || acol > 7 || acol < 0){
+    		return false;
+    	}
+    	
         if (board[arow][acol] !== '') {
             return false;
         }
@@ -339,6 +472,7 @@ angular.module('myApp.gameLogic', []).service('gameLogic', function() {
     //         stateBeforeMove: {},
     //         move: []
     function isMoveOk(params){
+    	//alert("test");
         var move = params.move;
         var turnIndexBeforeMove = params.turnIndexBeforeMove;
         var stateBeforeMove = params.stateBeforeMove;        
@@ -372,7 +506,8 @@ angular.module('myApp.gameLogic', []).service('gameLogic', function() {
         }
         return true;
     }
-    
+    this.getPossibleMoves = getPossibleMoves;
+    this.createComputerMove = createComputerMove;
     this.createMove = createMove;
     this.getInitialBoard = getInitialBoard;
     this.isMoveOk = isMoveOk;
