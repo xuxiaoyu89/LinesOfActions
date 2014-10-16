@@ -115,7 +115,7 @@ angular.module('myApp', ['ngTouch', 'ngDragDrop'])
     	return;
     };
 
-    scaleBodyService.scaleBody({width: 1300, height: 1300});
+    scaleBodyService.scaleBody({width: 900, height: 900});
     
     gameService.setGame({
         gameDeveloperEmail: "yoav.zibin@gmail.com",
