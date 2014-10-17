@@ -129,6 +129,10 @@ angular.module('myApp', ['ngTouch', 'ngDragDrop', 'ngAnimate'])
     	return $scope.delta != undefined && $scope.delta.brow === row && $scope.delta.bcol === col;
     }
     
+    $scope.isSelected = function(row, col){
+    	return $scope.brow === row && $scope.bcol === col;
+    }
+    
     scaleBodyService.scaleBody({width: 850, height: 850});
     
     gameService.setGame({
