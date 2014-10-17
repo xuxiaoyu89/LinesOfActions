@@ -27,8 +27,8 @@
         <table>
             <tr ng-repeat="row in board track by $index" class="ng-scope">
                 <td ng-repeat="cell in row track by $index" background="board.png" data-drop="droppable[$parent.$index][$index]" jqyoui-droppable="{onDrop: 'onDropCallback($parent.$index, $index)'}" ng-class="{cell: true, l: $index<1, t: $parent.$index<1 }" ng-click="cellClicked($parent.$index, $index)">
-                    <img ng-show="board[$parent.$index][$index]==='W'" data-drag="board[$parent.$index][$index]==='W'" data-jqyoui-options="{revert: 'invalid'}" jqyoui-draggable="{onStart: 'onStartCallback($parent.$index, $index)'}" src="white-checker.png">
-                    <img ng-show="board[$parent.$index][$index]==='R'" src="red-checker.png">
+                    <img ng-class="{slowlyAppear: shouldSlowlyAppear($parent.$index, $index), slowlyDisappear: shouldSlowlyDisappear($parent.$index, $index)}" ng-show="board[$parent.$index][$index]==='W'" data-drag="board[$parent.$index][$index]==='W'" data-jqyoui-options="{revert: 'invalid'}" jqyoui-draggable="{onStart: 'onStartCallback($parent.$index, $index)'}" src="white-checker.png">
+                    <img ng-class="{slowlyAppear: shouldSlowlyAppear($parent.$index, $index), slowlyDisappear: shouldSlowlyDisappear($parent.$index, $index)}" ng-show="board[$parent.$index][$index]==='R'" src="red-checker.png">
                     
                 </td>
             </tr>

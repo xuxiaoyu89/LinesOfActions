@@ -15,7 +15,7 @@ angular.module('myApp', ['ngTouch', 'ngDragDrop', 'ngAnimate'])
     	//alert("hello");
       $scope.params = params;
       $scope.board = params.stateAfterMove.board;
-      //$scope.delta = params.stateAfterMove.delta;
+      $scope.delta = params.stateAfterMove.delta;
       if ($scope.board === undefined) {
         $scope.board = gameLogic.getInitialBoard();
       }
@@ -120,7 +120,15 @@ angular.module('myApp', ['ngTouch', 'ngDragDrop', 'ngAnimate'])
     	$scope.cellClicked(r,c);
     	return;
     };
+    
+    $scope.shouldSlowlyAppear = function(row, col){
+    	return $scope.delta != undefined && $scope.delta.arow === row && $scope.delta.acol === col;
+    }
 
+    $scope.shouldSlowlyDisappear = function(row, col){
+    	return $scope.delta != undefined && $scope.delta.brow === row && $scope.delta.bcol === col;
+    }
+    
     scaleBodyService.scaleBody({width: 900, height: 900});
     
     gameService.setGame({
