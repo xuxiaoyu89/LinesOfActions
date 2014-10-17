@@ -13,7 +13,7 @@ angular.module('myApp', ['ngTouch', 'ngDragDrop', 'ngAnimate'])
 	  
     function updateUI(params) {
     	//alert("hello");
-      $scope.params = params;
+      //$scope.params = params;
       $scope.board = params.stateAfterMove.board;
       $scope.delta = params.stateAfterMove.delta;
       if ($scope.board === undefined) {
@@ -90,7 +90,7 @@ angular.module('myApp', ['ngTouch', 'ngDragDrop', 'ngAnimate'])
                                     move: move});
           if(!test){
         	  $scope.firstClicked = false;
-        	  updateUI($scope.params);
+        	  //updateUI($scope.params);
         	  return;
           }
           
