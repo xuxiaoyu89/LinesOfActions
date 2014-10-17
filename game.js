@@ -142,7 +142,7 @@ angular.module('myApp', ['ngTouch', 'ngDragDrop', 'ngAnimate'])
     	return $scope.brow === row && $scope.bcol === col;
     }
     
-    scaleBodyService.scaleBody({width: 850, height: 850});
+    scaleBodyService.scaleBody({width: 830, height: 830});
     
     gameService.setGame({
         gameDeveloperEmail: "yoav.zibin@gmail.com",

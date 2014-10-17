@@ -7,8 +7,6 @@ table {
   vertical-align: middle;
   width: 100px;
   height: 100px;
-  border-right: 2pt solid red;
-  border-bottom: 2pt solid red;
   margin: 0px;
   padding: 0px;
 }
@@ -19,14 +17,6 @@ table {
 
 .odd {
   background-color: black;
-}
-
-.l {
-  border-left: 2pt solid red;
-}
-
-.t {
-  border-top: 2pt solid red;
 }
 
 .board {
