@@ -1,10 +1,12 @@
 'use strict';
 
-angular.module('myApp', ['ngTouch', 'ngDragDrop'])
+angular.module('myApp', ['ngTouch', 'ngDragDrop', 'ngAnimate'])
   .controller('Ctrl', function (
-      $scope, $log, $timeout,
+      $scope, $log, $timeout, $animate,
       gameService, scaleBodyService, gameLogic) {
     
+	var moveAudio = new Audio('move.wav');  
+	moveAudio.load();
 	function sendComputerMove() {
 	      gameService.makeMove(gameLogic.createComputerMove($scope.board, $scope.turnIndex));
 	}
@@ -17,6 +19,10 @@ angular.module('myApp', ['ngTouch', 'ngDragDrop'])
       if ($scope.board === undefined) {
         $scope.board = gameLogic.getInitialBoard();
       }
+      else{
+    	  moveAudio.play();
+      }
+      
       $scope.isYourTurn = params.turnIndexAfterMove >= 0 && // game is ongoing
         params.yourPlayerIndex === params.turnIndexAfterMove; // it's my turn
       $scope.turnIndex = params.turnIndexAfterMove;
