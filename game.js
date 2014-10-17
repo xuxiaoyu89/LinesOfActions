@@ -121,6 +121,15 @@ angular.module('myApp', ['ngTouch', 'ngDragDrop', 'ngAnimate'])
     	return;
     };
     
+    $scope.isEven = function(row, col){
+    	var t = row + col;
+    	return t%2 === 0;
+    }
+    $scope.isOdd = function(row, col){
+    	var t = row + col;
+    	return t%2 === 1;
+    }
+    
     $scope.shouldSlowlyAppear = function(row, col){
     	return $scope.delta != undefined && $scope.delta.arow === row && $scope.delta.acol === col;
     }

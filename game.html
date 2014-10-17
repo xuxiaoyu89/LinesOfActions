@@ -25,12 +25,13 @@
     </head>
     <body ng-controller="Ctrl">
         <div style="height: 900px, width: 900px">
-        <table background="board1.png" class="board">
+        <table class="board">
             <tr ng-repeat="row in board track by $index">
-                <td ng-repeat="cell in row track by $index" data-drop="droppable[$parent.$index][$index]" jqyoui-droppable="{onDrop: 'onDropCallback($parent.$index, $index)'}" ng-class="{cell: true, l: $index<1, t: $parent.$index<1 }" ng-click="cellClicked($parent.$index, $index)">
+                <td ng-repeat="cell in row track by $index" data-drop="droppable[$parent.$index][$index]" jqyoui-droppable="{onDrop: 'onDropCallback($parent.$index, $index)'}" ng-class="{cell: true, even: isEven($parent.$index, $index), odd: isOdd($parent.$index, $index), l: $index<1, t: $parent.$index<1 }" ng-click="cellClicked($parent.$index, $index)">
+                    <div>
                     <img ng-class="{selectedChecker: isSelected($parent.$index, $index), slowlyAppear: shouldSlowlyAppear($parent.$index, $index), slowlyDisappear: shouldSlowlyDisappear($parent.$index, $index)}" ng-show="board[$parent.$index][$index]==='W'" data-drag="board[$parent.$index][$index]==='W'" data-jqyoui-options="{revert: 'invalid'}" jqyoui-draggable="{onStart: 'onStartCallback($parent.$index, $index)'}" src="white-checker.png">
                     <img ng-class="{slowlyAppear: shouldSlowlyAppear($parent.$index, $index), slowlyDisappear: shouldSlowlyDisappear($parent.$index, $index)}" ng-show="board[$parent.$index][$index]==='R'" src="red-checker.png">
-                    
+                    </div>
                 </td>
             </tr>
         </table>

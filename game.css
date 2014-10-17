@@ -13,6 +13,14 @@ table {
   padding: 0px;
 }
 
+.even {
+  background-color: grey;
+}
+
+.odd {
+  background-color: black;
+}
+
 .l {
   border-left: 2pt solid red;
 }
