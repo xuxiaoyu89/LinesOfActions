@@ -51,7 +51,7 @@ angular.module('myApp', ['ngTouch', 'ngDragDrop'])
       if ($scope.isYourTurn
           && params.playersInfo[params.yourPlayerIndex].playerId === '') {
         // Wait 500 milliseconds until animation ends.
-        $timeout(sendComputerMove, 500);
+        $timeout(sendComputerMove, 750);
       }
     }
     
@@ -184,7 +184,7 @@ angular.module('myApp', ['ngTouch', 'ngDragDrop'])
                 "animation": "moveAnimation 0.5s"};
     }
     
-    scaleBodyService.scaleBody({width: 830, height: 830});
+    scaleBodyService.scaleBody({width: 820, height: 820});
     
     gameService.setGame({
         gameDeveloperEmail: "yoav.zibin@gmail.com",
