@@ -1,9 +1,9 @@
 'use strict';
 
-angular.module('myApp', ['ngTouch', 'ngDragDrop'])
+angular.module('myApp', ['ngDragDrop'])
   .controller('Ctrl', function (
       $scope, $log, $timeout,
-      gameService, scaleBodyService, gameLogic) {
+      gameService, gameLogic) {
     
 	var moveAudio = new Audio('move.wav');  
 	moveAudio.load();
@@ -177,14 +177,14 @@ angular.module('myApp', ['ngTouch', 'ngDragDrop'])
     }
     
     function getStyle (brow, bcol, arow, acol) {
-        var left = (acol - bcol) * 75 + "px";
-        var top = (arow - brow) * 75 + "px";
+        var left = (acol - bcol) * 95 + "px";
+        var top = (arow - brow) * 95 + "px";
         return {top: top, left: left, position: "relative",
                 "-webkit-animation": "moveAnimation 0.5s",
                 "animation": "moveAnimation 0.5s"};
     }
     
-    scaleBodyService.scaleBody({width: 620, height: 620});
+    //scaleBodyService.scaleBody({width: 820, height: 820});
     
     gameService.setGame({
         gameDeveloperEmail: "yoav.zibin@gmail.com",
