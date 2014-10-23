@@ -1,14 +1,34 @@
 'use strict';
 
-angular.module('myApp', ['ngTouch', 'ngDragDrop', 'ngAnimate'])
+angular.module('myApp', ['ngTouch', 'ngDragDrop'])
   .controller('Ctrl', function (
-      $scope, $log, $timeout, $animate,
+      $scope, $log, $timeout,
       gameService, scaleBodyService, gameLogic) {
     
 	var moveAudio = new Audio('move.wav');  
 	moveAudio.load();
+	
 	function sendComputerMove() {
-	      gameService.makeMove(gameLogic.createComputerMove($scope.board, $scope.turnIndex));
+		
+		$scope.style = [[{},{},{},{},{},{},{},{}],
+		                [{},{},{},{},{},{},{},{}],
+		                [{},{},{},{},{},{},{},{}],
+		                [{},{},{},{},{},{},{},{}],
+		                [{},{},{},{},{},{},{},{}],
+						[{},{},{},{},{},{},{},{}],
+						[{},{},{},{},{},{},{},{}],
+			 			[{},{},{},{},{},{},{},{}]];
+		//add animate;
+		var move = gameLogic.createComputerMove($scope.board, $scope.turnIndex);
+		var brow = move[2].set.value.brow;
+		var bcol = move[2].set.value.bcol;
+		var arow = move[2].set.value.arow;
+		var acol = move[2].set.value.acol;
+		$scope.style[brow][bcol] = getStyle(brow, bcol, arow, acol);
+		//$log.info("style: ", $scope.style[brow][bcol]);
+		//$log.info("style: ", $scope.style[0][0]);
+		
+	    gameService.makeMove(move);
 	}
 	  
     function updateUI(params) {
@@ -97,7 +117,24 @@ angular.module('myApp', ['ngTouch', 'ngDragDrop', 'ngAnimate'])
           $scope.isYourTurn = false; // to prevent making another move
           $scope.firstClicked = false;
           // TODO: show animations and only then send makeMove.
-          $log.info("before makeMove()");
+          //$log.info("before makeMove()");
+          
+          $scope.style = [[{},{},{},{},{},{},{},{}],
+      	                [{},{},{},{},{},{},{},{}],
+      	                [{},{},{},{},{},{},{},{}],
+      	                [{},{},{},{},{},{},{},{}],
+      	                [{},{},{},{},{},{},{},{}],
+      					[{},{},{},{},{},{},{},{}],
+      					[{},{},{},{},{},{},{},{}],
+      		 			[{},{},{},{},{},{},{},{}]];
+  		  var brow = move[2].set.value.brow;
+  		  var bcol = move[2].set.value.bcol;
+  		  var arow = move[2].set.value.arow;
+  		  var acol = move[2].set.value.acol;
+  		  var style = getStyle(brow, bcol, arow, acol);
+  		  $scope.style[brow][bcol] = style;
+  		  //$log.info("style: ", $scope.style[brow][bcol]);
+  		  //$log.info("style: ", $scope.style[0][0]);
           gameService.makeMove(move);
         } catch (e) {
           $log.info(["Cell is already full in position:", row, col]);
@@ -130,16 +167,16 @@ angular.module('myApp', ['ngTouch', 'ngDragDrop', 'ngAnimate'])
     	return t%2 === 1;
     }
     
-    $scope.shouldSlowlyAppear = function(row, col){
-    	return $scope.delta != undefined && $scope.delta.arow === row && $scope.delta.acol === col;
-    }
-
-    $scope.shouldSlowlyDisappear = function(row, col){
-    	return $scope.delta != undefined && $scope.delta.brow === row && $scope.delta.bcol === col;
-    }
-    
     $scope.isSelected = function(row, col){
     	return $scope.brow === row && $scope.bcol === col;
+    }
+    
+    function getStyle (brow, bcol, arow, acol) {
+        var left = (acol - bcol) * 100 + "px";
+        var top = (arow - brow) * 100 + "px";
+        return {top: top, left: left, position: "relative",
+                "-webkit-animation": "moveAnimation 0.5s",
+                "animation": "moveAnimation 0.5s"};
     }
     
     scaleBodyService.scaleBody({width: 830, height: 830});
