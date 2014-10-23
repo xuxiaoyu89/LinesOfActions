@@ -86,6 +86,7 @@ angular.module('myApp', ['ngTouch', 'ngDragDrop'])
     $scope.firstClicked = false;
     $scope.brow = -1;
     $scope.bcol = -1;
+    $scope.isDragging = false;
     $scope.cellClicked = function (row, col) {
         $log.info(["Clicked on cell:", row, col]);
         if (!$scope.isYourTurn) {
@@ -117,25 +118,28 @@ angular.module('myApp', ['ngTouch', 'ngDragDrop'])
           $scope.firstClicked = false;
           // TODO: show animations and only then send makeMove.
           //$log.info("before makeMove()");
-          
-          $scope.style = [[{},{},{},{},{},{},{},{}],
-      	                [{},{},{},{},{},{},{},{}],
-      	                [{},{},{},{},{},{},{},{}],
-      	                [{},{},{},{},{},{},{},{}],
-      	                [{},{},{},{},{},{},{},{}],
-      					[{},{},{},{},{},{},{},{}],
-      					[{},{},{},{},{},{},{},{}],
-      		 			[{},{},{},{},{},{},{},{}]];
-  		  var brow = move[2].set.value.brow;
-  		  var bcol = move[2].set.value.bcol;
-  		  var arow = move[2].set.value.arow;
-  		  var acol = move[2].set.value.acol;
-  		  var style = getStyle(brow, bcol, arow, acol);
-  		  $scope.style[brow][bcol] = style;
-  		  $log.info("style: ", style);
-  		  $timeout(function(){
-			  gameService.makeMove(move);
-		  }, 500);
+          if($scope.isDragging === false){
+        	  $scope.style = [[{},{},{},{},{},{},{},{}],
+            	                [{},{},{},{},{},{},{},{}],
+            	                [{},{},{},{},{},{},{},{}],
+            	                [{},{},{},{},{},{},{},{}],
+            	                [{},{},{},{},{},{},{},{}],
+            					[{},{},{},{},{},{},{},{}],
+            					[{},{},{},{},{},{},{},{}],
+            		 			[{},{},{},{},{},{},{},{}]];
+        		  var brow = move[2].set.value.brow;
+        		  var bcol = move[2].set.value.bcol;
+        		  var arow = move[2].set.value.arow;
+        		  var acol = move[2].set.value.acol;
+        		  var style = getStyle(brow, bcol, arow, acol);
+        		  $scope.style[brow][bcol] = style;
+        		  $log.info("style: ", style);
+        		  $timeout(function(){
+      			  gameService.makeMove(move);
+      		  }, 500);
+          }
+          gameService.makeMove(move);
+          $scope.isDragging = false;
         } catch (e) {
           $log.info(["Cell is already full in position:", row, col]);
           return;
@@ -154,6 +158,7 @@ angular.module('myApp', ['ngTouch', 'ngDragDrop'])
     	var r = arguments[2];
     	var c = arguments[3];
     	$log.info("drop on cell: ", r,c);
+    	$scope.isDragging = true;
     	$scope.cellClicked(r,c);
     	return;
     };
