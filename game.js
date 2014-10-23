@@ -25,10 +25,10 @@ angular.module('myApp', ['ngTouch', 'ngDragDrop'])
 		var arow = move[2].set.value.arow;
 		var acol = move[2].set.value.acol;
 		$scope.style[brow][bcol] = getStyle(brow, bcol, arow, acol);
-		//$log.info("style: ", $scope.style[brow][bcol]);
-		//$log.info("style: ", $scope.style[0][0]);
-		
-	    gameService.makeMove(move);
+		$timeout(function(){
+			gameService.makeMove(move);
+		}, 500);
+	    //gameService.makeMove(move);
 	}
 	  
     function updateUI(params) {
@@ -72,7 +72,6 @@ angular.module('myApp', ['ngTouch', 'ngDragDrop'])
     		$scope.droppable[r][c] = true;
     	}
     }
-    //$animate.a  = "test";
     updateUI({stateAfterMove: {}, turnIndexAfterMove: 0, yourPlayerIndex: -2});
     
     $scope.droppable = [[false,false,false,false,false,false,false,false],
@@ -133,9 +132,9 @@ angular.module('myApp', ['ngTouch', 'ngDragDrop'])
   		  var acol = move[2].set.value.acol;
   		  var style = getStyle(brow, bcol, arow, acol);
   		  $scope.style[brow][bcol] = style;
-  		  //$log.info("style: ", $scope.style[brow][bcol]);
-  		  //$log.info("style: ", $scope.style[0][0]);
-          gameService.makeMove(move);
+  		  $timeout(function(){
+			  gameService.makeMove(move);
+		  }, 500);
         } catch (e) {
           $log.info(["Cell is already full in position:", row, col]);
           return;
