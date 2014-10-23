@@ -177,14 +177,14 @@ angular.module('myApp', ['ngTouch', 'ngDragDrop'])
     }
     
     function getStyle (brow, bcol, arow, acol) {
-        var left = (acol - bcol) * 100 + "px";
-        var top = (arow - brow) * 100 + "px";
+        var left = (acol - bcol) * 75 + "px";
+        var top = (arow - brow) * 75 + "px";
         return {top: top, left: left, position: "relative",
                 "-webkit-animation": "moveAnimation 0.5s",
                 "animation": "moveAnimation 0.5s"};
     }
     
-    scaleBodyService.scaleBody({width: 820, height: 820});
+    scaleBodyService.scaleBody({width: 620, height: 620});
     
     gameService.setGame({
         gameDeveloperEmail: "yoav.zibin@gmail.com",
