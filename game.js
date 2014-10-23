@@ -133,12 +133,12 @@ angular.module('myApp', ['ngTouch', 'ngDragDrop'])
         		  var acol = move[2].set.value.acol;
         		  var style = getStyle(brow, bcol, arow, acol);
         		  $scope.style[brow][bcol] = style;
-        		  $log.info("style: ", style);
+        		  //$log.info("style: ", style);
         		  $timeout(function(){
       			  gameService.makeMove(move);
       		  }, 500);
           }
-          gameService.makeMove(move);
+          else gameService.makeMove(move);
           $scope.isDragging = false;
         } catch (e) {
           $log.info(["Cell is already full in position:", row, col]);
