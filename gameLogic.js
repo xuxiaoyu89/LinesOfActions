@@ -36,6 +36,17 @@ angular.module('myApp').service('gameLogic', function() {
     			}
     		}
     		
+    		if(row-1>=0 && col-1>=0){
+    			if(visited[row-1][col-1] === false){
+    				if(board[row-1][col-1] === id){
+    					//console.log(1);
+        				stack.push([row-1, col-1]);
+        				count++;
+        				visited[row-1][col-1] = true;
+        			}	
+    			}
+    		}
+    		
     		if(row+1<8 && col-1>=0){
     			if(visited[row+1][col-1] === false){
     				if(board[row+1][col-1] === id){
