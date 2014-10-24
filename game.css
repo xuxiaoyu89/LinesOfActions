@@ -5,8 +5,8 @@ table {
 .cell {
   text-align:center;
   vertical-align: middle;
-  width: 95px;
-  height: 95px;
+  width: 40px;
+  height: 40px;
   margin: 0px;
   padding: 0px;
 }
@@ -20,7 +20,7 @@ table {
 }
 
 .board {
-  box-shadow: 0px 0px 100px #777777;
+  box-shadow: 0px 0px 50px #777777;
 }
 
 
@@ -33,7 +33,7 @@ table {
 }
 
 .selectedChecker {
-  box-shadow: 0px 0px 10px 10px #228B22;
+  box-shadow: 0px 0px 5px 5px #228B22;
 }
 
 .slowlyAppear {

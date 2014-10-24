@@ -177,8 +177,8 @@ angular.module('myApp', ['ngDragDrop'])
     }
     
     function getStyle (brow, bcol, arow, acol) {
-        var left = (acol - bcol) * 95 + "px";
-        var top = (arow - brow) * 95 + "px";
+        var left = (acol - bcol) * 40 + "px";
+        var top = (arow - brow) * 40 + "px";
         return {top: top, left: left, position: "relative",
                 "-webkit-animation": "moveAnimation 0.5s",
                 "animation": "moveAnimation 0.5s"};
