@@ -184,8 +184,6 @@ angular.module('myApp', ['ngDragDrop'])
                 "animation": "moveAnimation 0.5s"};
     }
     
-    //scaleBodyService.scaleBody({width: 820, height: 820});
-    
     gameService.setGame({
         gameDeveloperEmail: "yoav.zibin@gmail.com",
         minNumberOfPlayers: 2,
