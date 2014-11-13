@@ -13,7 +13,6 @@ http://yoav-zibin.github.io/emulator/stateService.js
 game.js
 gameLogic.js
 game.css
-board.png
 red-checker.png
 white-checker.png
 move.wav
