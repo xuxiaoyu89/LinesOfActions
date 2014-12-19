@@ -32,10 +32,11 @@ angular.module('myApp', ['ngDraggable', 'ngTouch'])
 	}
 	  
     function updateUI(params) {
-      alert("hello");
+      //alert("hello");
       //$scope.params = params;
       $scope.board = params.stateAfterMove.board;
       $scope.delta = params.stateAfterMove.delta;
+      $log.info($scope.board);
       if ($scope.board === undefined) {
         $scope.board = gameLogic.getInitialBoard();
       }
