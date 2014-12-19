@@ -7,6 +7,7 @@ http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular-touch.min.js
 http://yoav-zibin.github.io/emulator/ngDraggable.js
 http://yoav-zibin.github.io/emulator/gameService.js
 http://yoav-zibin.github.io/emulator/messageService.js
+http://yoav-zibin.github.io/emulator/messagePasser.js
 http://yoav-zibin.github.io/emulator/scaleBodyService.js
 http://yoav-zibin.github.io/emulator/stateService.js
 game.js
