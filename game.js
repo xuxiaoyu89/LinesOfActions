@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('myApp', ['ngDragDrop'])
+angular.module('myApp', ['ngDraggable'])
   .controller('Ctrl', function (
       $scope, $log, $timeout,
       gameService, gameLogic) {
@@ -54,16 +54,16 @@ angular.module('myApp', ['ngDragDrop'])
         $timeout(sendComputerMove, 750);
       }
     }
-    
+    /*
     function updateDroppable(row, col) {
-    	$scope.droppable = [[false,false,false,false,false,false,false,false],
-                            [false,false,false,false,false,false,false,false],
-                            [false,false,false,false,false,false,false,false],
-                            [false,false,false,false,false,false,false,false],
-                            [false,false,false,false,false,false,false,false],
-                            [false,false,false,false,false,false,false,false],
-                            [false,false,false,false,false,false,false,false],
-                            [false,false,false,false,false,false,false,false]
+    	$scope.droppable = [[true,true,true,true,true,true,true,true],
+                            [true,true,true,true,true,true,true,true],
+                            [true,true,true,true,true,true,true,true],
+                            [true,true,true,true,true,true,true,true],
+                            [true,true,true,true,true,true,true,true],
+                            [true,true,true,true,true,true,true,true],
+                            [true,true,true,true,true,true,true,true],
+                            [true,true,true,true,true,true,true,true]
                             ];
     	var possibleMoves = gameLogic.getPossibleMoves($scope.board, row, col, $scope.turnIndex);
     	for (var i=0; i<possibleMoves.length; i++){
@@ -71,9 +71,12 @@ angular.module('myApp', ['ngDragDrop'])
     		var c = possibleMoves[i][1];
     		$scope.droppable[r][c] = true;
     	}
-    }
+    }*/
+              
+              
     updateUI({stateAfterMove: {}, turnIndexAfterMove: 0, yourPlayerIndex: -2});
     
+    /*
     $scope.droppable = [[false,false,false,false,false,false,false,false],
                         [false,false,false,false,false,false,false,false],
                         [false,false,false,false,false,false,false,false],
@@ -83,6 +86,7 @@ angular.module('myApp', ['ngDragDrop'])
                         [false,false,false,false,false,false,false,false],
                         [false,false,false,false,false,false,false,false]
                         ];
+    
     $scope.firstClicked = false;
     $scope.brow = -1;
     $scope.bcol = -1;
@@ -145,21 +149,72 @@ angular.module('myApp', ['ngDragDrop'])
           return;
         }
     };
-    
-    $scope.onStartCallback = function(){
-    	var r = arguments[2];
-    	var c = arguments[3];
+    */
+     
+    $scope.onStartCallback = function(data, event, r, c){
+    	//var r = arguments[2];
+    	//var c = arguments[3];
     	$log.info("drag start on cell: ", r,c);
-    	$scope.cellClicked(r,c);
+    	//$scope.cellClicked(r,c);
+        $scope.brow = r;
+	    $scope.bcol = c;
     	return;
     };
     
-    $scope.onDropCallback = function(){
-    	var r = arguments[2];
-    	var c = arguments[3];
-    	$log.info("drop on cell: ", r,c);
+     
+    $scope.onDropCallback = function(data, event, row, col){
+    	//var r = arguments[2];
+    	//var c = arguments[3];
+    	$log.info("drop on cell: ", row, col);
+        $log.info("brow, bcol: ", $scope.brow, $scope.bcol);
     	$scope.isDragging = true;
-    	$scope.cellClicked(r,c);
+    	//$scope.cellClicked(r, c);
+    	try { 
+            var move = gameLogic.createMove($scope.board, $scope.brow, $scope.bcol, row, col, $scope.turnIndex);
+            //test if the move is OK.
+            var test = gameLogic.isMoveOk({turnIndexBeforeMove: $scope.turnIndex,
+  	                                stateBeforeMove: {board: $scope.board,
+     	                                                  delta: {brow: $scope.brow, bcol: $scope.bcol, arow: row, acol: col}},
+                                      move: move});
+            if(!test){
+          	  //$scope.firstClicked = false;
+          	  //updateUI($scope.params);
+          	  return;
+            }
+            
+            $scope.isYourTurn = false; // to prevent making another move
+            //$scope.firstClicked = false;
+            // TODO: show animations and only then send makeMove.
+            //$log.info("before makeMove()");
+            if($scope.isDragging === false){
+          	  $scope.style = [[{},{},{},{},{},{},{},{}],
+              	                [{},{},{},{},{},{},{},{}],
+              	                [{},{},{},{},{},{},{},{}],
+              	                [{},{},{},{},{},{},{},{}],
+              	                [{},{},{},{},{},{},{},{}],
+              					[{},{},{},{},{},{},{},{}],
+              					[{},{},{},{},{},{},{},{}],
+              		 			[{},{},{},{},{},{},{},{}]];
+          		  var brow = move[2].set.value.brow;
+          		  var bcol = move[2].set.value.bcol;
+          		  var arow = move[2].set.value.arow;
+          		  var acol = move[2].set.value.acol;
+          		  var style = getStyle(brow, bcol, arow, acol);
+          		  $scope.style[brow][bcol] = style;
+          		  //$log.info("style: ", style);
+          		  $timeout(function(){
+        			  gameService.makeMove(move);
+        		  }, 500);
+            }
+            else gameService.makeMove(move);
+            $scope.isDragging = false;
+          } catch (e) {
+            $log.info(["Cell is already full in position:", row, col]);
+            return;
+          }      
+              
+              
+              
     	return;
     };
     
@@ -185,7 +240,7 @@ angular.module('myApp', ['ngDragDrop'])
     }
     
     gameService.setGame({
-        gameDeveloperEmail: "yoav.zibin@gmail.com",
+        gameDeveloperEmail: "xuxiaoyu89@gmail.com",
         minNumberOfPlayers: 2,
         maxNumberOfPlayers: 2,
         exampleGame: gameLogic.getExampleGame(),
