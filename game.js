@@ -1,8 +1,8 @@
 'use strict';
 
-angular.module('myApp', ['ngDraggable'])
+angular.module('myApp', ['ngDraggable', 'ngTouch'])
   .controller('Ctrl', function (
-      $scope, $log, $timeout,
+      $window, $scope, $log, $timeout,
       gameService, gameLogic) {
     
 	var moveAudio = new Audio('move.wav');  
