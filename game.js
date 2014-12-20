@@ -232,6 +232,14 @@ angular.module('myApp', ['ngDraggable', 'ngTouch'])
     	return $scope.brow === row && $scope.bcol === col;
     }
     
+    $scope.isRed(row, col){
+    	return $board[row][col] === "R";
+    }
+    
+    $scope.isWhite(row, col){
+    	return $board[row][col] === "W";
+    }
+    
     function getStyle (brow, bcol, arow, acol) {
         var left = (acol - bcol) * 100 + "px";
         var top = (arow - brow) * 100 + "px";
