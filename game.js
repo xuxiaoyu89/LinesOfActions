@@ -201,8 +201,8 @@ angular.module('myApp', ['ngDraggable', 'ngTouch'])
           		  var bcol = move[2].set.value.bcol;
           		  var arow = move[2].set.value.arow;
           		  var acol = move[2].set.value.acol;
-          		  var style = getStyle(brow, bcol, arow, acol);
-          		  $scope.style[brow][bcol] = style;
+          		  //var style = getStyle(brow, bcol, arow, acol);
+          		  //$scope.style[brow][bcol] = style;
           		  //$log.info("style: ", style);
           		  $timeout(function(){
         			  gameService.makeMove(move);
