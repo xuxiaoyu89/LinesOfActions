@@ -30,7 +30,7 @@
                     ng-drop-success="onDropCallback($data, $event, $parent.$index, $index)"
                     ng-class="{cell: true, even: isEven($parent.$index, $index), odd: isOdd($parent.$index, $index)}"
                     ng-click="cellClicked($parent.$index, $index)">
-                    <div ng-style="style[$parent.$index][$index]">
+                    <div>
                         <img ng-class="{selectedChecker: isSelected($parent.$index, $index)}"
                              ng-show="board[$parent.$index][$index] === 'W'"
                              ng-drag="board[$parent.$index][$index]==='W' && turnIndex === 0"
