@@ -15,9 +15,9 @@ angular.module('myApp', ['ngDraggable', 'ngTouch'])
 		                [{},{},{},{},{},{},{},{}],
 		                [{},{},{},{},{},{},{},{}],
 		                [{},{},{},{},{},{},{},{}],
-						[{},{},{},{},{},{},{},{}],
-						[{},{},{},{},{},{},{},{}],
-			 			[{},{},{},{},{},{},{},{}]];
+				[{},{},{},{},{},{},{},{}],
+				[{},{},{},{},{},{},{},{}],
+	 			[{},{},{},{},{},{},{},{}]];
 		//add animate;
 		var move = gameLogic.createComputerMove($scope.board, $scope.turnIndex);
 		var brow = move[2].set.value.brow;
@@ -38,8 +38,14 @@ angular.module('myApp', ['ngDraggable', 'ngTouch'])
       $scope.delta = params.stateAfterMove.delta;
       if ($scope.board === undefined) {
         $scope.board = gameLogic.getInitialBoard();
-        $scope.board1 = $scope.board;
-        $log.info($scope.board1);
+        $scope.style = [[{},{},{},{},{},{},{},{}],
+		        [{},{},{},{},{},{},{},{}],
+		        [{},{},{},{},{},{},{},{}],
+                        [{},{},{},{},{},{},{},{}],
+	                [{},{},{},{},{},{},{},{}],
+			[{},{},{},{},{},{},{},{}],
+			[{},{},{},{},{},{},{},{}],
+ 			[{},{},{},{},{},{},{},{}]];
       }
       else{
     	  moveAudio.play();
