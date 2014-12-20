@@ -233,11 +233,11 @@ angular.module('myApp', ['ngDraggable', 'ngTouch'])
     }
     
     $scope.isRed = function(row, col){
-    	return $board[row][col] === "R";
+    	return $board[row][col] === 'R';
     }
     
     $scope.isWhite = function(row, col){
-    	return $board[row][col] === "W";
+    	return $board[row][col] === 'W';
     }
     
     function getStyle (brow, bcol, arow, acol) {
