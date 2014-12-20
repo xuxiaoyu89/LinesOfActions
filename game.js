@@ -232,11 +232,11 @@ angular.module('myApp', ['ngDraggable', 'ngTouch'])
     	return $scope.brow === row && $scope.bcol === col;
     }
     
-    $scope.isRed(row, col){
+    $scope.isRed = function(row, col){
     	return $board[row][col] === "R";
     }
     
-    $scope.isWhite(row, col){
+    $scope.isWhite = function(row, col){
     	return $board[row][col] === "W";
     }
     
