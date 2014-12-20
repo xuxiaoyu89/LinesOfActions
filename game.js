@@ -38,14 +38,7 @@ angular.module('myApp', ['ngDraggable', 'ngTouch'])
       $scope.delta = params.stateAfterMove.delta;
       if ($scope.board === undefined) {
         $scope.board = gameLogic.getInitialBoard();
-        $scope.style = [[{},{},{},{},{},{},{},{}],
-		        [{},{},{},{},{},{},{},{}],
-		        [{},{},{},{},{},{},{},{}],
-                        [{},{},{},{},{},{},{},{}],
-	                [{},{},{},{},{},{},{},{}],
-			[{},{},{},{},{},{},{},{}],
-			[{},{},{},{},{},{},{},{}],
- 			[{},{},{},{},{},{},{},{}]];
+        
       }
       else{
     	  moveAudio.play();
