@@ -5,7 +5,7 @@ angular.module('myApp', ['ngDraggable', 'ngTouch'])
       $window, $scope, $log, $timeout,
       gameService, gameLogic) {
     
-	var moveAudio = new Audio('move.wav');  
+	var moveAudio = new Audio('audio/move.wav');  
 	moveAudio.load();
 	
 	function sendComputerMove() {
