@@ -82,7 +82,7 @@ angular.module('myApp', ['ngDraggable', 'ngTouch'])
     }*/
               
               
-    updateUI({stateAfterMove: {}, turnIndexAfterMove: 0, yourPlayerIndex: -2});
+    //updateUI({stateAfterMove: {}, turnIndexAfterMove: 0, yourPlayerIndex: -2});
     
     /*
     $scope.droppable = [[false,false,false,false,false,false,false,false],
