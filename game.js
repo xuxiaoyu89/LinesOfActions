@@ -62,103 +62,9 @@ angular.module('myApp', ['ngDraggable', 'ngTouch'])
         $timeout(sendComputerMove, 750);
       }
     }
-    /*
-    function updateDroppable(row, col) {
-    	$scope.droppable = [[true,true,true,true,true,true,true,true],
-                            [true,true,true,true,true,true,true,true],
-                            [true,true,true,true,true,true,true,true],
-                            [true,true,true,true,true,true,true,true],
-                            [true,true,true,true,true,true,true,true],
-                            [true,true,true,true,true,true,true,true],
-                            [true,true,true,true,true,true,true,true],
-                            [true,true,true,true,true,true,true,true]
-                            ];
-    	var possibleMoves = gameLogic.getPossibleMoves($scope.board, row, col, $scope.turnIndex);
-    	for (var i=0; i<possibleMoves.length; i++){
-    		var r = possibleMoves[i][0];
-    		var c = possibleMoves[i][1];
-    		$scope.droppable[r][c] = true;
-    	}
-    }*/
-              
-              
+    
     updateUI({stateAfterMove: {}, turnIndexAfterMove: 0, yourPlayerIndex: -2});
     
-    /*
-    $scope.droppable = [[false,false,false,false,false,false,false,false],
-                        [false,false,false,false,false,false,false,false],
-                        [false,false,false,false,false,false,false,false],
-                        [false,false,false,false,false,false,false,false],
-                        [false,false,false,false,false,false,false,false],
-                        [false,false,false,false,false,false,false,false],
-                        [false,false,false,false,false,false,false,false],
-                        [false,false,false,false,false,false,false,false]
-                        ];
-    
-    $scope.firstClicked = false;
-    $scope.brow = -1;
-    $scope.bcol = -1;
-    $scope.isDragging = false;
-    $scope.cellClicked = function (row, col) {
-        $log.info(["Clicked on cell:", row, col]);
-        if (!$scope.isYourTurn) {
-          return;
-        }
-        if($scope.board[row][col] !== ''){
-        	$scope.firstClicked = true;
-        	$scope.brow = row;
-        	$scope.bcol = col;
-        	//update droppable;
-        	updateDroppable(row, col);
-        	return;
-        }
-        
-        try { 
-          var move = gameLogic.createMove($scope.board, $scope.brow, $scope.bcol, row, col, $scope.turnIndex);
-          //test if the move is OK.
-          var test = gameLogic.isMoveOk({turnIndexBeforeMove: $scope.turnIndex,
-	                                stateBeforeMove: {board: $scope.board,
-   	                                                  delta: {brow: $scope.brow, bcol: $scope.bcol, arow: row, acol: col}},
-                                    move: move});
-          if(!test){
-        	  $scope.firstClicked = false;
-        	  //updateUI($scope.params);
-        	  return;
-          }
-          
-          $scope.isYourTurn = false; // to prevent making another move
-          $scope.firstClicked = false;
-          // TODO: show animations and only then send makeMove.
-          //$log.info("before makeMove()");
-          if($scope.isDragging === false){
-        	  $scope.style = [[{},{},{},{},{},{},{},{}],
-            	                [{},{},{},{},{},{},{},{}],
-            	                [{},{},{},{},{},{},{},{}],
-            	                [{},{},{},{},{},{},{},{}],
-            	                [{},{},{},{},{},{},{},{}],
-            					[{},{},{},{},{},{},{},{}],
-            					[{},{},{},{},{},{},{},{}],
-            		 			[{},{},{},{},{},{},{},{}]];
-        		  var brow = move[2].set.value.brow;
-        		  var bcol = move[2].set.value.bcol;
-        		  var arow = move[2].set.value.arow;
-        		  var acol = move[2].set.value.acol;
-        		  var style = getStyle(brow, bcol, arow, acol);
-        		  $scope.style[brow][bcol] = style;
-        		  //$log.info("style: ", style);
-        		  $timeout(function(){
-      			  gameService.makeMove(move);
-      		  }, 500);
-          }
-          else gameService.makeMove(move);
-          $scope.isDragging = false;
-        } catch (e) {
-          $log.info(["Cell is already full in position:", row, col]);
-          return;
-        }
-    };
-    */
-     
     $scope.onStartCallback = function(data, event, r, c){
     	//var r = arguments[2];
     	//var c = arguments[3];
@@ -168,7 +74,6 @@ angular.module('myApp', ['ngDraggable', 'ngTouch'])
 	    $scope.bcol = c;
     	return;
     };
-    
      
     $scope.onDropCallback = function(data, event, row, col){
     	//var r = arguments[2];
@@ -195,22 +100,22 @@ angular.module('myApp', ['ngDraggable', 'ngTouch'])
             // TODO: show animations and only then send makeMove.
             //$log.info("before makeMove()");
             if($scope.isDragging === false){
-          	  $scope.style = [[{},{},{},{},{},{},{},{}],
+          	$scope.style = [[{},{},{},{},{},{},{},{}],
               	                [{},{},{},{},{},{},{},{}],
               	                [{},{},{},{},{},{},{},{}],
               	                [{},{},{},{},{},{},{},{}],
               	                [{},{},{},{},{},{},{},{}],
-              					[{},{},{},{},{},{},{},{}],
-              					[{},{},{},{},{},{},{},{}],
-              		 			[{},{},{},{},{},{},{},{}]];
-          		  var brow = move[2].set.value.brow;
-          		  var bcol = move[2].set.value.bcol;
-          		  var arow = move[2].set.value.arow;
-          		  var acol = move[2].set.value.acol;
-          		  //var style = getStyle(brow, bcol, arow, acol);
-          		  //$scope.style[brow][bcol] = style;
-          		  //$log.info("style: ", style);
-          		  $timeout(function(){
+              			[{},{},{},{},{},{},{},{}],
+              			[{},{},{},{},{},{},{},{}],
+              		 	[{},{},{},{},{},{},{},{}]];
+        	var brow = move[2].set.value.brow;
+          	var bcol = move[2].set.value.bcol;
+          	var arow = move[2].set.value.arow;
+          	var acol = move[2].set.value.acol;
+          	//var style = getStyle(brow, bcol, arow, acol);
+          	//$scope.style[brow][bcol] = style;
+          	//$log.info("style: ", style);
+          	$timeout(function(){
         			  gameService.makeMove(move);
         		  }, 500);
             }
