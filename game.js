@@ -65,13 +65,10 @@ angular.module('myApp', ['ngDraggable', 'ngTouch'])
     
     updateUI({stateAfterMove: {}, turnIndexAfterMove: 0, yourPlayerIndex: -2});
     
+    //update the start position of a move;
     $scope.onStartCallback = function(data, event, r, c){
-    	//var r = arguments[2];
-    	//var c = arguments[3];
-    	$log.info("drag start on cell: ", r,c);
-    	//$scope.cellClicked(r,c);
         $scope.brow = r;
-	    $scope.bcol = c;
+	$scope.bcol = c;
     	return;
     };
      
